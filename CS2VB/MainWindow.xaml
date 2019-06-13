@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CS2VB"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Click="Button_Click">convert</Button>
-    </Grid>
+        xmlns:local="clr-namespace:CS2VB" Title="CS to VB project converter"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight"
+    >
+    <StackPanel Margin="20" Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" Margin="3">
+        <TextBlock Margin="3" >Path to a C# solution to be converted to VB</TextBlock>
+            <TextBox Name="solutionPath" MinWidth="600"></TextBox>
+        </StackPanel>
+        <Button Click="Button_Click" Margin="3">Convert</Button>
+    </StackPanel>
 </Window>

@@ -29,7 +29,7 @@ namespace CS2VB
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            await new SolutionAndProjectConverter().ConvertSolution();
+            await new SolutionAndProjectConverter().ConvertSolution(solutionPath.Text);
             MessageBox.Show("Done");
         }
     }

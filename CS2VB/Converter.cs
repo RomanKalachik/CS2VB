@@ -33,15 +33,15 @@ namespace CodeConverter.Tests.TestRunners
         /// </summary>
         private bool _writeNewCharacterization = false;
 
-        public async Task ConvertProjectsWhere<TLanguageConversion>(Func<Project, bool> shouldConvertProject, [CallerMemberName] string testName = "") where TLanguageConversion : ILanguageConversion, new()
+        public async Task ConvertProjectsWhere<TLanguageConversion>(string solutionPath, Func<Project, bool> shouldConvertProject, [CallerMemberName] string testName = "") where TLanguageConversion : ILanguageConversion, new()
         {
             using (var workspace = MSBuildWorkspace.Create(new Dictionary<string, string>()
             {
                 {"Configuration", "Debug"},
                 {"Platform", "AnyCPU"},  { "CheckForSystemRuntimeDependency", "true" }
             })) {
-                var originalSolutionDir = @"D:\W_Demos\Demos\Demos.XPF\ChartsDemo\ChartsDemo\";
-                var solutionFile = Directory.GetFiles(originalSolutionDir, "ChartsDemo.Wpf.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                var originalSolutionDir = Path.GetDirectoryName(solutionPath);
+                var solutionFile = solutionPath;//Directory.GetFiles(originalSolutionDir, "ChartsDemo.Wpf.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
 
                 var solution = await workspace.OpenSolutionAsync(solutionFile);
                 var languageNameToConvert = typeof(TLanguageConversion) == typeof(VBToCSConversion)
@@ -50,8 +50,8 @@ namespace CodeConverter.Tests.TestRunners
                 var projectsToConvert = solution.Projects.Where(p => p.Language == languageNameToConvert && shouldConvertProject(p)).ToArray();
                var conversionResults =  SolutionConverter.CreateFor<TLanguageConversion>(projectsToConvert, new SimpleProgressCallback())
                     .Convert()
-                    .GetAwaiter()
-                    .GetResult()
+                    //.GetAwaiter()
+                    //.GetResult()
                     .ToDictionary(c => c.TargetPathOrNull, StringComparer.OrdinalIgnoreCase);
                 foreach (var conversionResult in conversionResults) {
                     var expectedFilePath = conversionResult.Key.Replace(originalSolutionDir, originalSolutionDir + "\\VB\\");
